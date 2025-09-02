@@ -93,7 +93,7 @@ const PartnerForm = () => {
           };
 
           await axios.post(
-            "https://retailors-data.onrender.com/api/customers",
+            "https://realfincorp.onrender.com/api/customers",
             formWithLocation
           );
 

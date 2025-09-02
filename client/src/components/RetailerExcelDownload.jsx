@@ -47,7 +47,7 @@ const RetailerExcelDownload = () => {
       if (endDate) params.end = endDate;
 
       const res = await axios.get(
-        "https://retailors-data.onrender.com/api/customers/excel",
+        "https://realfincorp.onrender.com/api/customers/excel",
         {
           params,
           responseType: "blob",
