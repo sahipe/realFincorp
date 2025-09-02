@@ -10,26 +10,22 @@ app.use(express.json());
 // MongoDB Connection
 mongoose
   .connect(
-    "mongodb+srv://formservices10:orCFD0tIt4zjfMD3@cluster0.8wlv5xx.mongodb.net/customersDB"
+    "mongodb+srv://formservices10:orCFD0tIt4zjfMD3@cluster0.8wlv5xx.mongodb.net/realFincorpDB"
   )
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB error:", err));
 
 // Schema
 const customerSchema = new mongoose.Schema({
-  employeeName: String,
-  customerName: String,
-  customerContact: String,
-  customerEmail: String,
-  cityVillage: String,
-  tehsil: String,
-  district: String,
-  state: String,
+  name: String,
+  arn: String,
+  sip: String,
+  health: String,
+  motor: String,
+  mf: String,
+  life: String,
   visitingDateTime: Date,
   customerImage: String,
-  insurance: String, // was bbps
-  mfSif: String, // was dmt
-  statusOfConversation: String, // was onboardingStatus (Yes/No)
   latitude: Number,
   longitude: Number,
 });
@@ -55,7 +51,7 @@ app.post("/api/customers", async (req, res) => {
 // GET - Download Excel with optional filters
 app.get("/api/customers/excel", async (req, res) => {
   try {
-    const { startDate, endDate, employeeName } = req.query;
+    const { startDate, endDate, name } = req.query;
     const filter = {};
 
     if (startDate || endDate) {
@@ -64,8 +60,8 @@ app.get("/api/customers/excel", async (req, res) => {
       if (endDate) filter.visitingDateTime.$lte = new Date(endDate);
     }
 
-    if (employeeName) {
-      filter.employeeName = new RegExp(employeeName, "i");
+    if (name) {
+      filter.name = new RegExp(name, "i");
     }
 
     const customers = await Customer.find(filter).lean();
@@ -76,20 +72,16 @@ app.get("/api/customers/excel", async (req, res) => {
     }
 
     const formattedData = customers.map((c) => ({
-      "Employee Name": c.employeeName,
-      "Customer Name": c.customerName,
-      "Customer Contact": c.customerContact,
-      "Customer Email": c.customerEmail,
-      "City/Village": c.cityVillage,
-      Tehsil: c.tehsil,
-      District: c.district,
-      State: c.state,
+      Name: c.name,
+      ARN: c.arn,
+      SIP: c.sip,
+      Health: c.health,
+      Motor: c.motor,
+      "Mutual Fund": c.mf,
+      Life: c.life,
       "Visiting Date & Time": c.visitingDateTime
         ? new Date(c.visitingDateTime).toLocaleString()
         : "",
-      Insurance: c.insurance,
-      "MF/SIF": c.mfSif,
-      "Status of Conversation": c.statusOfConversation,
       "Customer Image": c.customerImage,
       Latitude: c.latitude,
       Longitude: c.longitude,

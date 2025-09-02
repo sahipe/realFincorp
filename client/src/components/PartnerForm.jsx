@@ -4,18 +4,15 @@ import { uploadImageToCloudinary } from "../hooks/uploadImage"; // compress + up
 
 const PartnerForm = () => {
   const [form, setForm] = useState({
-    employeeName: "",
-    customerName: "",
-    customerContact: "",
-    customerEmail: "",
-    cityVillage: "",
-    tehsil: "",
-    district: "",
-    state: "",
+    name: "",
+
+    arn: "",
+    sip: "",
+    health: "",
     visitingDateTime: "",
-    insurance: "",
-    mfSif: "",
-    statusOfConversation: "",
+    motor: "",
+    mf: "",
+    life: "",
     customerImage: "",
     latitude: "",
     longitude: "",
@@ -50,31 +47,22 @@ const PartnerForm = () => {
   };
 
   const validateForm = () => {
-    const requiredFields = Object.keys(form).filter(
-      (key) => key !== "tehsil" && key !== "latitude" && key !== "longitude"
-    );
+    // Required fields (excluding latitude & longitude)
+    const requiredFields = [
+      "name",
+      "arn",
+      "sip",
+      "health",
+      "motor",
+      "mf",
+      "life",
+      "visitingDateTime",
+      "customerImage",
+    ];
 
     for (let field of requiredFields) {
-      if (!form[field] || form[field].trim() === "") {
+      if (!form[field] || form[field].toString().trim() === "") {
         alert(`Please fill the ${field.replace(/([A-Z])/g, " $1")}`);
-        return false;
-      }
-    }
-
-    if (!/^\d{10}$/.test(form.customerContact)) {
-      alert("Customer Contact must be a valid 10-digit number");
-      return false;
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.customerEmail)) {
-      alert("Please enter a valid email address");
-      return false;
-    }
-
-    const numberFields = ["insurance", "mfSif"];
-    for (let field of numberFields) {
-      if (isNaN(form[field]) || Number(form[field]) < 0) {
-        alert(`${field.toUpperCase()} must be a valid positive number`);
         return false;
       }
     }
@@ -111,18 +99,15 @@ const PartnerForm = () => {
 
           alert("Data saved successfully!");
           setForm({
-            employeeName: "",
-            customerName: "",
-            customerContact: "",
-            customerEmail: "",
-            cityVillage: "",
-            tehsil: "",
-            district: "",
-            state: "",
+            name: "",
+
+            arn: "",
+            sip: "",
+            health: "",
             visitingDateTime: "",
-            insurance: "",
-            mfSif: "",
-            statusOfConversation: "",
+            motor: "",
+            mf: "",
+            life: "",
             customerImage: "",
             latitude: "",
             longitude: "",
@@ -146,31 +131,75 @@ const PartnerForm = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
       <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl p-8">
         <h2 className="text-3xl font-extrabold text-gray-800 mb-8 text-center">
-          Customer Data Form
+          Real fincorp Data Form
         </h2>
 
         {/* Form Fields */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {[
-            { name: "employeeName", placeholder: "Employee Name" },
-            { name: "customerName", placeholder: "Customer Name" },
-            { name: "customerContact", placeholder: "Customer Contact Number" },
-            { name: "customerEmail", placeholder: "Customer Email ID" },
-            { name: "cityVillage", placeholder: "City/Village" },
-            { name: "tehsil", placeholder: "Tehsil (Optional)" },
-            { name: "district", placeholder: "District" },
-            { name: "state", placeholder: "State" },
-          ].map((field) => (
-            <input
-              key={field.name}
-              name={field.name}
-              value={form[field.name]}
-              onChange={handleChange}
-              placeholder={field.placeholder}
-              className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 shadow-sm"
-            />
-          ))}
+          {/* Name */}
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Name"
+            className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 shadow-sm"
+          />
 
+          {/* ARN */}
+          <input
+            name="arn"
+            value={form.arn}
+            onChange={handleChange}
+            placeholder="ARN"
+            className="border border-gray-300 rounded-lg p-3"
+          />
+
+          {/* SIP */}
+          <input
+            name="sip"
+            value={form.sip}
+            onChange={handleChange}
+            placeholder="SIP"
+            className="border border-gray-300 rounded-lg p-3"
+          />
+
+          {/* Health */}
+          <input
+            name="health"
+            value={form.health}
+            onChange={handleChange}
+            placeholder="Health"
+            className="border border-gray-300 rounded-lg p-3"
+          />
+
+          {/* Motor */}
+          <input
+            name="motor"
+            value={form.motor}
+            onChange={handleChange}
+            placeholder="Motor"
+            className="border border-gray-300 rounded-lg p-3"
+          />
+
+          {/* Mutual Fund */}
+          <input
+            name="mf"
+            value={form.mf}
+            onChange={handleChange}
+            placeholder="Mutual Fund"
+            className="border border-gray-300 rounded-lg p-3"
+          />
+
+          {/* Life */}
+          <input
+            name="life"
+            value={form.life}
+            onChange={handleChange}
+            placeholder="Life"
+            className="border border-gray-300 rounded-lg p-3"
+          />
+
+          {/* Visiting Date & Time */}
           <input
             type="datetime-local"
             name="visitingDateTime"
@@ -178,58 +207,34 @@ const PartnerForm = () => {
             onChange={handleChange}
             className="border border-gray-300 rounded-lg p-3"
           />
+        </div>
+
+        {/* Camera Capture */}
+        <div className="mt-4">
           <input
-            name="insurance"
-            value={form.insurance}
-            onChange={handleChange}
-            placeholder="Insurance / day"
-            className="border border-gray-300 rounded-lg p-3"
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            style={{ display: "none" }}
+            onChange={handleImageCapture}
           />
-          <input
-            name="mfSif"
-            value={form.mfSif}
-            onChange={handleChange}
-            placeholder="MF / SIF"
-            className="border border-gray-300 rounded-lg p-3"
-          />
-          <select
-            name="statusOfConversation"
-            value={form.statusOfConversation}
-            onChange={handleChange}
-            className="border border-gray-300 rounded-lg p-3 bg-white"
+          <button
+            type="button"
+            onClick={openCamera}
+            className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow"
+            disabled={imageUploading}
           >
-            <option value="">Status of Conversation</option>
-            <option value="yes">Yes</option>
-            <option value="No">No</option>
-          </select>
+            📷 {imageUploading ? "Uploading..." : "Capture Image"}
+          </button>
 
-          {/* Camera Capture */}
-          <div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              style={{ display: "none" }}
-              onChange={handleImageCapture}
+          {form.customerImage && !imageUploading && (
+            <img
+              src={form.customerImage}
+              alt="Customer"
+              className="mt-2 w-32 h-32 object-cover rounded-lg shadow"
             />
-            <button
-              type="button"
-              onClick={openCamera}
-              className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow"
-              disabled={imageUploading}
-            >
-              📷 {imageUploading ? "Uploading..." : "Capture Image"}
-            </button>
-
-            {form.customerImage && !imageUploading && (
-              <img
-                src={form.customerImage}
-                alt="Customer"
-                className="mt-2 w-32 h-32 object-cover rounded-lg shadow"
-              />
-            )}
-          </div>
+          )}
         </div>
 
         {/* Save Button */}

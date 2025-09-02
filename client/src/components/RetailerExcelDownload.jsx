@@ -57,7 +57,7 @@ const RetailerExcelDownload = () => {
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "customers_data.xlsx");
+      link.setAttribute("download", "realFincorp_data.xlsx");
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -72,7 +72,7 @@ const RetailerExcelDownload = () => {
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-lg border border-gray-200">
       <h3 className="text-lg font-semibold mb-4 text-gray-800">
-        Download customers Data
+        Download real fincorp Data
       </h3>
 
       {/* Date Inputs */}
